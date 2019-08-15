@@ -3,6 +3,7 @@ package conf
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 )
@@ -11,6 +12,87 @@ type Config struct {
 	data     map[string]interface{}
 	rawData  string
 	filename string
+}
+
+var configure *Config
+
+func Init(filename string) error {
+	configure = LoadFile(filename)
+	if configure == nil {
+		return errors.New("init config fail")
+	}
+	return nil
+}
+
+func Get(key string) interface{} {
+	if configure == nil {
+		return nil
+	}
+	return configure.Get(key)
+}
+
+//Get data as a int, if not found， return -1
+func GetInt(key string) int {
+	if configure == nil {
+		return 0
+	}
+	return configure.GetInt(key)
+}
+
+func GetIntWithDefault(key string, defaultVal int) int {
+	if configure == nil {
+		return 0
+	}
+	return configure.GetIntWithDefault(key, defaultVal)
+}
+
+func GetString(key string) string {
+	if configure == nil {
+		return ""
+	}
+	return configure.GetString(key)
+}
+
+func GetStringWithDefault(key string, defaultVal string) string {
+	if configure == nil {
+		return ""
+	}
+	return configure.GetStringWithDefault(key, defaultVal)
+}
+
+func GetFloat(key string) float64 {
+	if configure == nil {
+		return 0
+	}
+	return configure.GetFloat(key)
+}
+
+func GetFloatWithDefault(key string, defaultVal float64) float64 {
+	if configure == nil {
+		return 0
+	}
+	return configure.GetFloatWithDefault(key, defaultVal)
+}
+
+func GetBool(key string) bool {
+	if configure == nil {
+		return false
+	}
+	return configure.GetBool(key)
+}
+
+func GetBoolWithDefault(key string, defaultVal bool) bool {
+	if configure == nil {
+		return false
+	}
+	return configure.GetBoolWithDefault(key, defaultVal)
+}
+
+func GetJson() string {
+	if configure == nil {
+		return ""
+	}
+	return configure.GetJson()
 }
 
 func LoadFile(filename string) *Config {
